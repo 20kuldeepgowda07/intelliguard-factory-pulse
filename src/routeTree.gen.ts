@@ -15,6 +15,7 @@ import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as MachinesIndexRouteImport } from './routes/machines.index'
 import { Route as MachinesMachineIdRouteImport } from './routes/machines.$machineId'
+import { Route as ApiPublicIngestSensorRouteImport } from './routes/api/public/ingest-sensor'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const MachinesMachineIdRoute = MachinesMachineIdRouteImport.update({
   path: '/machines/$machineId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicIngestSensorRoute = ApiPublicIngestSensorRouteImport.update({
+  id: '/api/public/ingest-sensor',
+  path: '/api/public/ingest-sensor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/machines/$machineId': typeof MachinesMachineIdRoute
   '/machines/': typeof MachinesIndexRoute
+  '/api/public/ingest-sensor': typeof ApiPublicIngestSensorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/machines/$machineId': typeof MachinesMachineIdRoute
   '/machines': typeof MachinesIndexRoute
+  '/api/public/ingest-sensor': typeof ApiPublicIngestSensorRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/machines/$machineId': typeof MachinesMachineIdRoute
   '/machines/': typeof MachinesIndexRoute
+  '/api/public/ingest-sensor': typeof ApiPublicIngestSensorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/machines/$machineId'
     | '/machines/'
+    | '/api/public/ingest-sensor'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/machines/$machineId'
     | '/machines'
+    | '/api/public/ingest-sensor'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/machines/$machineId'
     | '/machines/'
+    | '/api/public/ingest-sensor'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   MachinesMachineIdRoute: typeof MachinesMachineIdRoute
   MachinesIndexRoute: typeof MachinesIndexRoute
+  ApiPublicIngestSensorRoute: typeof ApiPublicIngestSensorRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MachinesMachineIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ingest-sensor': {
+      id: '/api/public/ingest-sensor'
+      path: '/api/public/ingest-sensor'
+      fullPath: '/api/public/ingest-sensor'
+      preLoaderRoute: typeof ApiPublicIngestSensorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   MachinesMachineIdRoute: MachinesMachineIdRoute,
   MachinesIndexRoute: MachinesIndexRoute,
+  ApiPublicIngestSensorRoute: ApiPublicIngestSensorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

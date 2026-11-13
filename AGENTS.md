@@ -31,7 +31,8 @@ use the editor.
 
 ## Project rules
 
-- IntelliGuard is a prototype with simulated telemetry: machine specs, series generation and status rules live in `src/lib/telemetry.ts` (pure, unit-tested); live state, alerts and preferences live in `src/lib/demo-store.tsx` and persist to localStorage — no backend until real sensors exist.
+- IntelliGuard is a prototype with simulated telemetry: machine specs, series generation and status rules live in `src/lib/telemetry.ts` (pure, unit-tested); live state, alerts and preferences live in `src/lib/demo-store.tsx` and persist to localStorage. The dashboard does not read the backend yet.
+- Real sensor readings enter only through `POST /api/public/ingest-sensor`, which checks a Bearer token against the `SENSOR_INGEST_TOKEN` secret, validates with `src/lib/sensor-ingest.ts`, and inserts via the service-role client; the `sensor_readings` table has no public insert policy so the publishable key cannot write fake data.
 - SSR and first paint use the fixed `REFERENCE_NOW`; real time is applied after hydration so server and client markup match.
 - The 3D factory scene (`src/components/ig/FactoryScene.tsx`) is lazy-loaded behind `ClientOnly` via `FactoryBackdrop`; never import it statically from a route, because three.js cannot run during SSR.
 - Beacon labels are plain DOM elements positioned each frame by `LabelProjector`, not drei `<Html>`, which spawns extra React roots and logs unmount races.
