@@ -5,3 +5,5 @@
 - [ ] Settings toggle: Simulated vs Live data source
 - [ ] Live mode: dashboard cards, trend charts, health status, history list from stored readings, auto-update on new readings
 - [ ] Insert sample readings via the endpoint, read them back, verify dashboard shows them
+- [ ] Remix setup: set a new SENSOR_INGEST_TOKEN value for this copy
+- [ ] Remix setup: recreate sensor_readings (and approved additions) in the new empty database
