@@ -8,7 +8,13 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { DemoProvider } from "@/lib/demo-store";
+import { IntroContext } from "@/components/ig/Reveal";
+import { PageLoader } from "@/components/ig/PageLoader";
+import { SiteHeader } from "@/components/ig/SiteHeader";
+import { SiteFooter } from "@/components/ig/SiteFooter";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -75,22 +81,24 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
-    // Replace these placeholders with the app's name and description when first building the app.
-    // Each content route, / included, must still set its own head(). Never add og:image or
-    // twitter:image here: every page without its own would inherit the root's preview image.
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "IntelliGuard — Machine Health Telemetry" },
+      { name: "description", content: "Prototype machine-health dashboard for small factories, workshops and pump stations." },
+      { name: "author", content: "IntelliGuard Project" },
+      { property: "og:title", content: "IntelliGuard — Machine Health Telemetry" },
+      { property: "og:description", content: "Prototype machine-health dashboard for small factories, workshops and pump stations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -120,11 +128,23 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [ready, setReady] = useState(false);
+  const done = useCallback(() => setReady(true), []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <DemoProvider>
+        <IntroContext.Provider value={{ ready }}>
+          {!ready && <PageLoader onDone={done} />}
+          <SiteHeader />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <main id="main">
+            <Outlet />
+          </main>
+          <SiteFooter />
+          <Toaster position="bottom-right" />
+        </IntroContext.Provider>
+      </DemoProvider>
     </QueryClientProvider>
   );
 }
